@@ -1,0 +1,17 @@
+{
+    "name": "buildbot", 
+    "version": "0.0.1",
+    "author": "Justin Hurley (@jmh)",
+    "main": "server/app.js",
+    "dependencies": {
+        "connect-redis": "1.2.0", 
+        "express": "2.5.1", 
+        "oauth": "0.9.7", 
+        "password": "latest", 
+        "redis": "latest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jatenate/buildbot.git"
+    }
+}

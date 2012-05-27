@@ -1,0 +1,18 @@
+#!/bin/sh
+# Run the command, including arguments with spaces
+"$@"
+status=$?
+
+# decide which status to use
+if [ "$status" == "0" ] ; then
+    result="Succeeded"
+else
+    result="Failed"
+fi
+
+# TODO: What happes when this contains an @?
+# TODO: Is it actually sending the right thing? sleep 10 only sent sleep...
+curl -s -G --data-urlencode "to=$BBOT_TO" --data-urlencode "token=$BBOT_TOKEN" --data-urlencode "text=$result: $@" bldbt.com/send
+
+# exit with the original status
+exit $status

@@ -1,0 +1,4 @@
+# Node ignores
+npm_debug.log
+node_modules/
+dump.rdb
