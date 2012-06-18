@@ -1,6 +1,8 @@
 # Buildbot: Twitter DM Notifications
 
-Buildbot let's you easily send notifications via Twitter DM's. It was originally created for sending DM's when a long running build completes, but can easily be used for arbitrary DM's (for example, a daily cron job that DM's the weather).
+Buildbot lets you easily send notifications via Twitter DM's. It was originally created for sending DM's when a long running build completes, but can easily be used for arbitrary DM's (for example, a daily cron job that DM's the weather).
+
+Alternatively, if you want to receive an SMS when your job completes, check out [buildbot_sms](https://github.com/jatenate/buildbot_sms).
 
 It is composed of two parts, the bbot script and the Buildbot server.
 
