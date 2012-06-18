@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Buildbot by jatenate</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Buildbot</h1>
+        <p>Buildbot: Twitter DM Notifications</p>
+        <p class="view"><a href="https://github.com/jatenate/buildbot">View the Project on GitHub <small>jatenate/buildbot</small></a></p>
+        <ul>
+          <li><a href="https://github.com/jatenate/buildbot/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jatenate/buildbot/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jatenate/buildbot">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Buildbot: Twitter DM Notifications</h1>
+
+<p>Buildbot lets you easily send notifications via Twitter DM's. It was originally created for sending DM's when a long running build completes, but can easily be used for arbitrary DM's (for example, a daily cron job that DM's the weather).</p>
+
+<p>Alternatively, if you want to receive an SMS when your job completes, check out <a href="https://github.com/jatenate/buildbot_sms">buildbot_sms</a>.</p>
+
+<p>It is composed of two parts, the bbot script and the Buildbot server.</p>
+
+<h2>bbot script</h2>
+
+<p>Prepend bbot to any command to receive a DM with the exit status when it completes.</p>
+
+<div class="highlight">
+<pre>bbot ant long-running-build
+</pre>
+</div>
+
+
+<h4>Setting up the bbot script</h4>
+
+<ul>
+<li>Follow <a href="http://www.twitter.com/buildbot">@buildbot</a>
+</li>
+<li>You will receive a DM from <a href="https://github.com/buildbot" class="user-mention">@buildbot</a> with a token for your account (for example: <code>"octopusorange"</code>)</li>
+<li>Set <code>$BBOT_TO</code> and <code>$BBOT_TOKEN</code> environment variables</li>
+</ul><div class="highlight">
+<pre><span class="c"># Add to your sh profile</span>
+<span class="nb">export </span><span class="nv">BBOT_TO</span><span class="o">=</span><span class="s2">"your_twitter_handle"</span>
+<span class="nb">export </span><span class="nv">BBOT_TOKEN</span><span class="o">=</span><span class="s2">"octopusorange"</span>
+</pre>
+</div>
+
+
+<ul>
+<li>Put the <code>bbot</code> script somewhere in your <code>PATH</code>
+</li>
+</ul><div class="highlight">
+<pre>cp ./bbot /usr/local/bin/bbot
+chmod +x /usr/local/bin/bbot
+</pre>
+</div>
+
+
+<h4>Using Buildbot via curl</h4>
+
+<p><code>GET</code> requests to <code>bldbt.com/send</code> require 3 parameters:</p>
+
+<ol>
+<li>
+<code>to</code>: twitter handle of the user to send to (ie ladygaga). This user must follow <a href="https://github.com/buildbot" class="user-mention">@buildbot</a>
+</li>
+<li>
+<code>token</code>: token for the user specified by <code>to</code>. This token was automatically sent as a DM from <a href="https://github.com/buildbot" class="user-mention">@buildbot</a> when you followed</li>
+<li>
+<code>text</code>: URL encoded text to send</li>
+</ol><div class="highlight">
+<pre>curl -G --data-urlencode <span class="s2">"text=This is a test of the emergency buildbot system"</span> bldbt.com/send?to<span class="o">=</span><span class="nv">$BBOT_TO</span>&amp;token<span class="o">=</span><span class="nv">$BBOT_TOKEN</span>
+</pre>
+</div>
+
+
+<h4>Limitations</h4>
+
+<p>The twitter API <a href="https://support.twitter.com/articles/15364-about-twitter-limits-update-api-dm-and-following">limits each account to 250 DM's per day</a>. Want to send a lot? Set up your own instance of Buildbot below.</p>
+
+<p>The twitter API also <a href="https://support.twitter.com/articles/68809">prevents you from sending the same dm more than once</a>. To get around this, when a send fails because the text has been sent before, buildbot prepends a random hex string to the text.</p>
+
+<h2>Buildbot server</h2>
+
+<p>An instance of the Buildbot server is running at bldbt.com, using the <a href="https://github.com/buildbot" class="user-mention">@buildbot</a> account to send DM's. To set up your own server:</p>
+
+<ul>
+<li>
+<a href="https://dev.twitter.com/apps">Create a new twitter app</a>, and generate access tokens for it</li>
+<li>Clone the Buildbot Repo</li>
+</ul><div class="highlight">
+<pre>git clone git@github.com:jatenate/buildbot.git
+<span class="nb">cd </span>buildbot
+git remote add upstream git://github.com/jatenate/buildbot.git
+npm install
+</pre>
+</div>
+
+
+<ul>
+<li>Set <code>CONSUMER_KEY</code>, <code>CONSUMER_SECRET</code>, <code>ACCESS_TOKEN</code>, and <code>ACCESS_SECRET</code> in <code>server/modules/twitter.js</code>
+</li>
+<li>Start redis and buildbot</li>
+</ul><div class="highlight">
+<pre>redis-server
+node server/app.js
+</pre>
+</div>
+
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jatenate">jatenate</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-32155234-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
